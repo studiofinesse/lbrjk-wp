@@ -26,11 +26,11 @@ add_action('after_setup_theme', 'lj_media_config');
  * @return str          The updated content with replacements made
  */
 function lj_image_wrap($content){
-    return preg_replace(
-        '/(?:<p[^>]*>)?(<img .*?class=["\'].*?size-full["\' ][^>]*>)(?:<\/p>)?/i',
-        '<div class="post-image">$1</div>',
-        $content
-    );
+	return preg_replace(
+		'/(?:<p[^>]*>)?<img .*?class=["\'](.*?)" .*?src=["\'](.*?)" .*?alt=["\'](.*?)"["\' ][^>]*>(?:<\/p>)?/',
+		'<div class="post-image $1"><img src="$2" alt="$3" /></div>',
+		$content
+	);
 }
 add_filter('the_content', 'lj_image_wrap');
 
