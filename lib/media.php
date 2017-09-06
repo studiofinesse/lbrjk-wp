@@ -25,14 +25,27 @@ add_action('after_setup_theme', 'lj_media_config');
  * @param  str $content The original content of the post
  * @return str          The updated content with replacements made
  */
-function lj_image_wrap($content){
-	return preg_replace(
-		'/(?:<p[^>]*>)?<img .*?class=["\'](.*?)" .*?src=["\'](.*?)" .*?alt=["\'](.*?)"["\' ][^>]*>(?:<\/p>)?/',
-		'<div class="post-image $1"><img src="$2" alt="$3" /></div>',
-		$content
-	);
+function lj_image_wrap($content) {
+	return preg_replace_callback( '!<p[^>]*>.*?(<img[^>]+>).*?</p>!', function ( $match ) {
+		$image = $match[1];
+		$class = 'post-image';
+		$other = str_replace( $image, '', $match[0] );
+
+		if ( ! strlen( trim( strip_tags( $other ) ) ) ) {
+			$other = '';
+		}
+
+		if ( preg_match( '!class=["\'](.+?)["\']!', $image, $classes ) ) {
+			$image  = str_replace( $classes[0], '', $image );
+			$class .= " $classes[1]";
+		}
+
+		$image = sprintf( '<div class="%s">%s</div>', $class, $image );
+
+		return "$image\n$other";
+	}, $content );
 }
-add_filter('the_content', 'lj_image_wrap');
+add_filter('the_content', 'lj_image_wrap', 15);
 
 /**
  * Removes the inline style width declaration from the wp-caption element
