@@ -44,15 +44,12 @@ function get_company_gm_link($type) {
 		$url = 'https://www.google.com/maps/search/';
 	}
 
-	$str_address = get_company_info('street');
-	$locality = get_company_info('locality');
-	$region = get_company_info('region');
-	$postcode = get_company_info('postcode');
-
-	$address = $str_address . ' ' . $locality . ' ' . $region . ' ' . $postcode;
+	$address = get_company_info('address');
+	$address = implode('+', array_filter($address));
 	$link = str_replace(' ', '+', $address);
 
 	return $url . $link;
+	// return $address;
 }
 
 function the_company_email_link() {
