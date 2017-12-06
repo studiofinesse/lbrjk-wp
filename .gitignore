@@ -1,0 +1,8 @@
+!.gitignore
+!README.md
+
+# generic
+.DS_Store
+.sass-cache
+*.sublime*
+!.gitkeep
