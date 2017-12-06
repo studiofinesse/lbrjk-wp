@@ -19,8 +19,9 @@ include_once('admin/editor.php');
 include_once('admin/login.php');
 include_once('admin/users.php');
 
-include_once('lib/lbrjk-functions.php');
-include_once('lib/lbrjk-setup.php');
+include_once('lib/helpers.php');
+include_once('lib/functions.php');
+include_once('lib/setup.php');
 include_once('lib/media.php');
 include_once('lib/nav-menu.php');
 
@@ -28,3 +29,5 @@ include_once('public/breadcrumbs.php');
 include_once('public/excerpts.php');
 include_once('public/pagination.php');
 include_once('public/section-navigation.php');
+include_once('public/shortcodes.php');
+include_once('public/social.php');
