@@ -11,6 +11,31 @@ function dump($data) {
 }
 
 /**
+ * Update the blog description with custom field
+ * Also reduce chance of 'Just another WordPress' site being displayed
+ * @param  str $text   The current text
+ * @param  mixed $show The type of information requested
+ * @return str         New description
+ */
+function update_blog_description($text, $show) {
+	$tagline = get_company_info('tagline');
+
+    if ('description' == $show) {
+        if($tagline) {
+			$text = $tagline;
+		} else {
+			if($text != 'Just another WordPress site') {
+				$text = $text;
+			} else {
+				$text = '';
+			}
+		}
+    }
+    return $text;
+}
+add_filter('bloginfo', 'update_blog_description', 10, 2);
+
+/**
  * List the terms of a post from a specific taxonomy
  * @param  integer $id  The ID of the post
  * @param  string  $tax Name of the taxonomy to grab the terms of
