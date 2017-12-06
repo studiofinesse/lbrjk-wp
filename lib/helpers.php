@@ -10,20 +10,28 @@ function get_company_info($type) {
 	return get_field($type, 'option');
 }
 
-function the_company_address() {
-	// $name = get_company_info('name');
-	$str_address = get_company_info('street');
-	$locality = get_company_info('locality');
-	$region = get_company_info('region');
-	$postcode = get_company_info('postcode');
+function the_company_address($inc_name = false) {
+	// Company name
+	$name = get_company_info('name');
+	// Company address
+	$address = get_company_info('address');
+	// Address items
+	$address_one = $address['company_address_1'];
+	$address_two = $address['company_address_2'];
+	$str_address = $address['company_street'];
+	$locality = $address['company_locality'];
+	$region = $address['company_region'];
+	$postcode = $address['company_postcode'];
 
 	echo '<div itemscope itemtype="http://schema.org/PostalAddress">';
 	echo '<p class="address">';
-	// echo '<span itemprop="name">' . $name . '</span> ';
-	echo '<span itemprop="streetAddress">' . $str_address . '</span> ';
-	echo '<span itemprop="addressLocality">' . $locality . '</span> ';
-	echo '<span itemprop="addressRegion">' . $region . '</span> ';
-	echo '<span itemprop="postalCode">' . $postcode . '</span>';
+	if($inc_name) echo '<span itemprop="name" class="address__name">' . $name . '</span> ';
+	if($address_one) echo '<span itemprop="streetAddress" class="address__street">' . $address_one . '</span> ';
+	if($address_two) echo '<span itemprop="streetAddress" class="address__street">' . $address_two . '</span> ';
+	echo '<span itemprop="streetAddress" class="address__street">' . $str_address . '</span> ';
+	echo '<span itemprop="addressLocality" class="address__locality">' . $locality . '</span> ';
+	echo '<span itemprop="addressRegion" class="address_region">' . $region . '</span> ';
+	echo '<span itemprop="postalCode" class="address__postcode">' . $postcode . '</span>';
 	echo '</p>';
 	echo '</div>';
 }
