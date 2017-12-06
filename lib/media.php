@@ -4,9 +4,9 @@
  * Set default options when inserting media
  */
 function lj_media_config() {
-	update_option('image_default_align', 'none' ); // No alignment
-	update_option('image_default_link_type', 'none' ); // No link
-	update_option('image_default_size', 'large' ); // Full size
+	update_option('image_default_align', 'none'); // No alignment
+	update_option('image_default_link_type', 'none'); // No link
+	update_option('image_default_size', 'large'); // Full size
 
 	// Update default image sizes to something more usable
 	update_option('thumbnail_size_w', 300); // thumbnail width
@@ -20,64 +20,63 @@ function lj_media_config() {
 add_action('after_setup_theme', 'lj_media_config');
 
 /**
- * Wrap images in div with class for styling
- * rather than default p tag
- * @param  str $content The original content of the post
- * @return str          The updated content with replacements made
+ * Wrap images (& their links) in .post-image containers, and move any custom
+ * image classes to the container.
  */
-function lj_image_wrap($content) {
-	return preg_replace_callback( '!<p[^>]*>.*?(<img[^>]+>).*?</p>!', function ( $match ) {
-		$image = $match[1];
-		$class = 'post-image';
-		$other = str_replace( $image, '', $match[0] );
+function lj_post_image_markup($html) {
+	return preg_replace_callback('/^(<[pa][^>]*>)*<img[^>]+>(<\/[pa]>)*$/m', function ($match) {
+		$image = strip_tags($match[0], '<a><img>');
 
-		if ( ! strlen( trim( strip_tags( $other ) ) ) ) {
-			$other = '';
+		if(preg_match('/ class=["\'](.+?)["\']/', $image, $class)) {
+			$image = str_replace($class[0], '', $image);
+			$class = trim($class[1]);
+			if(strlen($class)) {
+				$class = " $class";
+			}
+		} else {
+			$class = '';
 		}
 
-		if ( preg_match( '!class=["\'](.+?)["\']!', $image, $classes ) ) {
-			$image  = str_replace( $classes[0], '', $image );
-			$class .= " $classes[1]";
-		}
-
-		$image = sprintf( '<div class="%s">%s</div>', $class, $image );
-
-		return "$image\n$other";
-	}, $content );
+		return "\n<div class='post-image$class'>$image</div>\n";
+	}, $html);
 }
-add_filter('the_content', 'lj_image_wrap', 15);
+add_filter('the_content', 'lj_post_image_markup');
 
 /**
- * Removes the inline style width declaration from the wp-caption element
- * Also updates the class to a less wp specific 'post-caption'
- * @param  array $attr    The image attributes
- * @return string         The html of the caption
+ * Custom caption HTML, moves any custom classes on image to the container.
  */
-function lj_caption_fix($attr, $content = null) {
-	if (!isset($attr['caption'])) {
-		if(preg_match( '#((?:<a [^>]+>\s*)?<img [^>]+>(?:\s*</a>)?)(.*)#is', $content, $matches)) {
-			$content = $matches[1];
-			$attr['caption'] = trim($matches[2]);
-		}
+function lj_post_caption_markup($html, $attr, $image) {
+	$atts = shortcode_atts([
+		'caption' => '',
+		'align'      => 'alignnone',
+		'class'   => '',
+	], $attr, 'caption');
+
+	if(preg_match('/ class=["\'](.+?)["\']/', $image, $class)) {
+		$image = str_replace($class[0], '', $image);
+		$class = $class[1];
+	} else {
+		$class = '';
 	}
 
-	$output = apply_filters('img_caption_shortcode', '', $attr, $content);
+	$class = "$class {$atts['class']} {$atts['align']}";
+	$class = explode(' ', $class);
+	$class = array_unique($class);
+	$class = array_map('trim', $class);
+	$class = array_filter($class);
+	$class = implode(' ', $class);
 
-	if ($output != '')
-		return $output;
-	extract(shortcode_atts(array(
-		'id'    => '',
-		'align' => 'alignnone',
-		'width' => '',
-		'caption' => ''
-	), $attr));
+	if(strlen($class)) {
+		$class = " $class";
+	}
 
-	if (1 > (int) $width || empty($caption))
-		return $content;
+	return <<<html
 
-	if($id) $id = 'id="' . esc_attr($id) . '" ';
-	return '<figure ' . $id . 'class="post-caption">'
-	. do_shortcode( $content ) . '<figcaption class="post-caption-text">' . $caption . '</figcaption></figure>';
+<figure class="post-image post-image--w-caption$class">
+	$image
+	<figcaption>{$atts['caption']}</figcaption>
+</figure>
+
+html;
 }
-add_shortcode('wp_caption', 'lj_caption_fix');
-add_shortcode('caption', 'lj_caption_fix');
+add_filter('img_caption_shortcode', 'lj_post_caption_markup', 10, 3);
