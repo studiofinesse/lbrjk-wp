@@ -5,7 +5,7 @@
  * @return str html link to stylesheet
  */
 function lbrjk_custom_login() {
-	$files = '<link rel="stylesheet" href="' . LBRJK_URL . '/admin/css/lbrjk-login.css" />';
+	$files = '<link rel="stylesheet" href="' . LBRJK_URL . '/assets/css/login.css" />';
 	// Echo link to custom stylesheet
 	echo $files;
 }

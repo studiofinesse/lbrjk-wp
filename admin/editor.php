@@ -5,7 +5,7 @@
  */
 function lbrjk_custom_editor_styles($mce_css) {
 	// add_editor_stylesheet
-	$mce_css .= ', ' . plugins_url('css/lbrjk-editor.css', __FILE__);
+	$mce_css .= ', ' . plugins_url('../assets/css/editor.css', __FILE__);
 	return $mce_css;
 }
 add_filter('mce_css', 'lbrjk_custom_editor_styles');
