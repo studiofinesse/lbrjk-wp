@@ -19,11 +19,13 @@ include_once('admin/editor.php');
 include_once('admin/login.php');
 include_once('admin/users.php');
 
+include_once('lib/setup.php');
 include_once('lib/helpers.php');
 include_once('lib/functions.php');
-include_once('lib/setup.php');
+include_once('lib/analytics.php');
 include_once('lib/media.php');
 include_once('lib/nav-menu.php');
+include_once('lib/opening-hours.php');
 
 include_once('public/breadcrumbs.php');
 include_once('public/excerpts.php');
