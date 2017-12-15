@@ -12,7 +12,7 @@ function custom_wp_nav_menu($var, $item = null) {
 			// List of allowed menu classes
 			// 'current_page_item',
 			'current_page_parent',
-			'current_page_ancestor',
+			'current-page-ancestor',
 			'current-menu-item',
 			'first',
 			'last',
@@ -38,7 +38,7 @@ function current_to_active($text){
 		// List of menu item classes that should be changed to "active"
 		// 'current_page_item' => 'active-page',
 		'current_page_parent' => 'parent-active',
-		// 'current_page_ancestor' => 'active',
+		'current-page-ancestor' => 'active',
 		'current-menu-item' => 'active'
 	);
 
