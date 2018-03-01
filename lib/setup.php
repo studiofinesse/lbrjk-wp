@@ -31,3 +31,11 @@ add_filter('rest_jsonp_enabled', '__return_false');
 // Prevent output in head
 remove_action('wp_head', 'rest_output_link_wp_head', 10);
 remove_action('wp_head', 'wp_oembed_add_discovery_links', 10);
+
+/**
+ * Reduce priority of Yoast SEO Metabox so always
+ * appears below any ACF metaboxes.
+ */
+add_filter('wpseo_metabox_prio', function() {
+	return 'low';
+});
