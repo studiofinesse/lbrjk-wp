@@ -37,7 +37,7 @@ function current_to_active($text){
 	$replace = array(
 		// List of menu item classes that should be changed to "active"
 		// 'current_page_item' => 'active-page',
-		'current_page_parent' => 'parent-active',
+		'current_page_parent' => 'active',
 		'current-page-ancestor' => 'active',
 		'current-menu-item' => 'active'
 	);
