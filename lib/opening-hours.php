@@ -115,7 +115,7 @@ function opening_hours_summary($format = 'ampm') {
 
 }
 
-function opening_hours_as_text($time_format) {
+function opening_hours_as_text($time_format = 'ampm') {
 	$openingtimes = opening_hours_summary($time_format);
 	echo '<p class="opening-hours">';
 	foreach($openingtimes as $day => $hours) echo '<span>' . $day . ' ' . $hours . '</span>';
