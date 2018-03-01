@@ -36,7 +36,7 @@ function the_company_address($inc_name = false) {
 	echo '</div>';
 }
 
-function get_company_gm_link($type) {
+function get_company_gm_link($type, $inc_name = false) {
 
 	if($type === 'directions') {
 		$url = 'https://www.google.com/maps/dir/Current+Location/';
@@ -44,12 +44,13 @@ function get_company_gm_link($type) {
 		$url = 'https://www.google.com/maps/search/';
 	}
 
+	$name = get_company_info('name');
 	$address = get_company_info('address');
 	$address = implode('+', array_filter($address));
+	if($inc_name) $address = $name . ' ' . $address;
 	$link = str_replace(' ', '+', $address);
 
 	return $url . $link;
-	// return $address;
 }
 
 function the_company_email_link() {
@@ -61,6 +62,8 @@ function the_company_email_link() {
 function the_company_tel_link() {
 	$tel_no = get_company_info('tel');
 	$tel_no_link = str_replace(' ', '', $tel_no);
+	// Replace leading zero with country code
+	$tel_no_link = preg_replace('/^0?/', '+44', $tel_no_link);
 
 	return '<a href="tel:' . $tel_no_link . '">' . $tel_no . '</a>';
 }
