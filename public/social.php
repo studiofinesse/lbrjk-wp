@@ -12,11 +12,11 @@ function lj_social_links() {
 	}
 }
 
-function lj_social_icons() {
+function lj_social_icons($colors = false) {
 	$accounts = get_field('social_media_accounts', 'option');
 
 	if($accounts) {
-		echo '<div class="social-icons">';
+		echo $colors ? '<div class="social-icons social-icons--branded">' : '<div class="social-icons">';
 		echo '<ul>';
 		foreach($accounts as $account) {
 			echo '<li class="icon icon--' . $account['social_media_account']['value'] . '">';
