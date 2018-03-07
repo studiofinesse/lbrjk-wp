@@ -32,14 +32,34 @@ function lbrjk_mce_styles($settings) {
 			'classes' => 'lead'
 		),
 		array(
-			'title' => 'Small Button',
+			'title' => 'Text Primary',
+			'selector' => 'p',
+			'classes' => 'text--primary'
+		),
+		array(
+			'title' => 'Text Secondary',
+			'selector' => 'p',
+			'classes' => 'text--secondary'
+		),
+		array(
+			'title' => 'Text Alt',
+			'selector' => 'p',
+			'classes' => 'text--alt'
+		),
+		array(
+			'title' => 'Text White',
+			'selector' => 'p',
+			'classes' => 'text--white'
+		),
+		array(
+			'title' => 'Button',
 			'selector' => 'a',
-			'classes' => 'button--small'
+			'classes' => 'button'
 		),
 		array(
 			'title' => 'Large Button',
 			'selector' => 'a',
-			'classes' => 'button--large'
+			'classes' => 'button button--large'
 		),
 		array(
 			'title' => 'Button Primary',
