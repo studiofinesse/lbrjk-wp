@@ -50,10 +50,12 @@ function list_terms($id = 0, $tax = '') {
  * @param  string $size Name of the thumbnail size to return
  * @return string       URL of image in requested size
  */
-function get_post_img_url($size = 'full') {
+function get_post_img_url( $size = 'full', $post_id = 0 ) {
 	global $post;
 
-	$thumb = wp_get_attachment_image_src(get_post_thumbnail_id($post->ID), $size);
+	$id = isset( $post_id ) ? $post_id : $post->ID;
+
+	$thumb = wp_get_attachment_image_src( get_post_thumbnail_id( $post_id ), $size );
 	$url = $thumb['0'];
 
 	return $url;
