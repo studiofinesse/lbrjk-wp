@@ -21,7 +21,7 @@ function lj_social_icons($colors = false) {
 		foreach($accounts as $account) {
 			echo '<li class="icon icon--' . $account['social_media_account']['value'] . '">';
 			echo '<a href="' . $account['social_media_account_url'] . '" title="Find us on ' . $account['social_media_account']['label'] . '">';
-			echo file_get_contents(plugins_url('../assets/img', __FILE__) . '/icon-' . $account['social_media_account']['value'] . '.svg');
+			echo file_get_contents( plugin_dir_url( '', __FILE__ ) . 'lbrjk-wp/assets/img/icon-' . $account['social_media_account']['value'] . '.svg' );
 			echo '</a>';
 			echo '</li>';
 		}
