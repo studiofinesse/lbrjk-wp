@@ -6,7 +6,7 @@
  * @param  string $class Class for wrapping div and BEM prefix for inner elements
  * @return string        Simple markup
  */
-function lj_prev_next_pagination($class = 'post-pagination') {
+function lj_prev_next_pagination( $class = 'post-pagination' ) {
 
 	global $paged;
 	global $wp_query;
@@ -19,13 +19,13 @@ function lj_prev_next_pagination($class = 'post-pagination') {
 	$next_link = get_next_posts_page_link();
 	$next_text = 'Older Posts';
 
-	if($pages > 1) {
+	if( $pages > 1 ) {
 
 		echo '<div class="' . $class . '">';
-		if(!$has_prev) echo '<span class="' . $class . '__prev">' . $prev_text . '</span>';
-		if($has_prev) echo '<a href="' . $prev_link . '" class="' . $class . '__prev">' . $prev_text . '</a>';
-		if($has_next) echo '<a href="' . $next_link . '" class="' . $class . '__next">' . $next_text . '</a>';
-		if(!$has_next) echo '<span class="' . $class . '__next">' . $next_text . '</span>';
+		if( ! $has_prev ) echo '<span class="' . $class . '__prev disabled">' . $prev_text . '</span>';
+		if( $has_prev ) echo '<a href="' . $prev_link . '" class="' . $class . '__prev">' . $prev_text . '</a>';
+		if( $has_next ) echo '<a href="' . $next_link . '" class="' . $class . '__next">' . $next_text . '</a>';
+		if( ! $has_next ) echo '<span class="' . $class . '__next disabled">' . $next_text . '</span>';
 		echo '</div>';
 
 	}

@@ -6,8 +6,8 @@
  * @param  mixed $data Data to explore
  * @return str       Result of data inside <pre> tags
  */
-function dump($data) {
-	echo '<pre>' , var_dump($data) , '</pre>';
+function dump( $data ) {
+	echo '<pre>' , var_dump( $data ) , '</pre>';
 }
 
 /**
@@ -17,14 +17,14 @@ function dump($data) {
  * @param  mixed $show The type of information requested
  * @return str         New description
  */
-function update_blog_description($text, $show) {
-	$tagline = get_company_info('tagline');
+function update_blog_description( $text, $show ) {
+	$tagline = get_company_info( 'tagline' );
 
-    if ('description' == $show) {
-        if($tagline) {
+    if ( 'description' == $show ) {
+        if( $tagline ) {
 			$text = $tagline;
 		} else {
-			if($text != 'Just another WordPress site') {
+			if( $text != 'Just another WordPress site' ) {
 				$text = $text;
 			} else {
 				$text = '';
@@ -33,16 +33,16 @@ function update_blog_description($text, $show) {
     }
     return $text;
 }
-add_filter('bloginfo', 'update_blog_description', 10, 2);
+add_filter( 'bloginfo', 'update_blog_description', 10, 2 );
 
 /**
  * List the terms of a post from a specific taxonomy
  * @param  integer $id  The ID of the post
  * @param  string  $tax Name of the taxonomy to grab the terms of
  */
-function list_terms($id = 0, $tax = '') {
-	$terms_as_text = get_the_term_list($id, $tax, '', ', ');
-	if(!empty($terms_as_text)) echo strip_tags($terms_as_text);
+function list_terms( $id = 0, $tax = '' ) {
+	$terms_as_text = get_the_term_list( $id, $tax, '', ', ' );
+	if( !empty( $terms_as_text ) ) echo strip_tags( $terms_as_text );
 }
 
 /**
@@ -67,9 +67,9 @@ function get_post_img_url( $size = 'full', $post_id = 0 ) {
  * @param  str $plural   Plural name, leave blank to append 's' to singular
  * @return array         Full list of required labels
  */
-function post_type_labels($singular, $plural = null) {
+function post_type_labels( $singular, $plural = null ) {
 
-	if ($plural === null) {
+	if ( $plural === null ) {
 		$plural = $singular . 's';
 	}
 
@@ -88,7 +88,7 @@ function post_type_labels($singular, $plural = null) {
 		'parent_item_colon'  => 'Parent '.$plural.': ',
 		'not_found'          => 'No '.$plural.' found.',
 		'not_found_in_trash' => 'No '.$plural.' found in Trash.'
-	);
+	 );
 
 	return $labels;
 }

@@ -5,7 +5,7 @@
  * @param  Integer $length Number of words to return
  * @return String          The excerpt text
  */
-function lj_custom_excerpt($length)  {
+function lj_custom_excerpt( $length )  {
     $content = get_the_content();
-    return wp_trim_words($content, $length);
+    return wp_trim_words( $content, $length );
 }
