@@ -32,3 +32,12 @@ function current_user_role_is( $roles ) {
 	}
 	return false;
 }
+
+/**
+ * Add form viewing privileges to Editors
+ */
+function lbrjk_user_privileges() {
+	$role = get_role( 'editor' );
+	$role->add_cap( 'gravityforms_view_entries' );
+}
+add_action( 'init', 'lbrjk_user_privileges' );
