@@ -1,5 +1,7 @@
 <?php
 
+if( ! defined('ABSPATH' ) ) exit;
+
 /**
  * Simply output results of var_dump function
  * inside preformatted tags for easy reading
@@ -10,39 +12,118 @@ function dump( $data ) {
 	echo '<pre>' , var_dump( $data ) , '</pre>';
 }
 
-/**
- * Update the blog description with custom field
- * Also reduce chance of 'Just another WordPress' site being displayed
- * @param  str $text   The current text
- * @param  mixed $show The type of information requested
- * @return str         New description
- */
-function update_blog_description( $text, $show ) {
-	$tagline = get_company_info( 'tagline' );
+function lj_get_posthumbnail( $post = 0 ) {
+	$attachment = get_post_thumbnail_id( $post );
 
-    if ( 'description' == $show ) {
-        if( $tagline ) {
-			$text = $tagline;
-		} else {
-			if( $text != 'Just another WordPress site' ) {
-				$text = $text;
-			} else {
-				$text = '';
-			}
+	// get post
+	if( !$attachment = get_post($attachment) ) {
+		return false;
+	}
+
+	// validate post_type
+	if( $attachment->post_type !== 'attachment' ) {
+		return false;
+	}
+
+	// vars
+	$sizes_id = 0;
+	$meta = wp_get_attachment_metadata( $attachment->ID );
+	$attached_file = get_attached_file( $attachment->ID );
+	$attachment_url = wp_get_attachment_url( $attachment->ID );
+
+	// get mime types
+	if( strpos( $attachment->post_mime_type, '/' ) !== false ) {
+		list( $type, $subtype ) = explode( '/', $attachment->post_mime_type );
+	} else {
+		list( $type, $subtype ) = array( $attachment->post_mime_type, '' );
+	}
+
+	// vars
+	$response = array(
+		'ID'			=> $attachment->ID,
+		'id'			=> $attachment->ID,
+		'title'       	=> $attachment->post_title,
+		'filename'		=> wp_basename( $attached_file ),
+		'filesize'		=> 0,
+		'url'			=> $attachment_url,
+		'link'			=> get_attachment_link( $attachment->ID ),
+		'alt'			=> get_post_meta( $attachment->ID, '_wp_attachment_image_alt', true ),
+		'author'		=> $attachment->post_author,
+		'description'	=> $attachment->post_content,
+		'caption'		=> $attachment->post_excerpt,
+		'name'			=> $attachment->post_name,
+        'status'		=> $attachment->post_status,
+        'uploaded_to'	=> $attachment->post_parent,
+        'date'			=> $attachment->post_date_gmt,
+		'modified'		=> $attachment->post_modified_gmt,
+		'menu_order'	=> $attachment->menu_order,
+		'mime_type'		=> $attachment->post_mime_type,
+        'type'			=> $type,
+        'subtype'		=> $subtype,
+        'icon'			=> wp_mime_type_icon( $attachment->ID )
+	);
+
+	// filesize
+	if( isset($meta['filesize']) ) {
+		$response['filesize'] = $meta['filesize'];
+	} elseif( file_exists($attached_file) ) {
+		$response['filesize'] = filesize( $attached_file );
+	}
+
+	// image
+	if( $type === 'image' ) {
+
+		$sizes_id = $attachment->ID;
+		$src = wp_get_attachment_image_src( $attachment->ID, 'full' );
+
+		$response['url'] = $src[0];
+		$response['width'] = $src[1];
+		$response['height'] = $src[2];
+
+	// video
+	} elseif( $type === 'video' ) {
+
+		// dimentions
+		$response['width'] = acf_maybe_get($meta, 'width', 0);
+		$response['height'] = acf_maybe_get($meta, 'height', 0);
+
+		// featured image
+		if( $featured_id = get_post_thumbnail_id($attachment->ID) ) {
+			$sizes_id = $featured_id;
 		}
-    }
-    return $text;
-}
-add_filter( 'bloginfo', 'update_blog_description', 10, 2 );
 
-/**
- * List the terms of a post from a specific taxonomy
- * @param  integer $id  The ID of the post
- * @param  string  $tax Name of the taxonomy to grab the terms of
- */
-function list_terms( $id = 0, $tax = '' ) {
-	$terms_as_text = get_the_term_list( $id, $tax, '', ', ' );
-	if( !empty( $terms_as_text ) ) echo strip_tags( $terms_as_text );
+	// audio
+	} elseif( $type === 'audio' ) {
+
+		// featured image
+		if( $featured_id = get_post_thumbnail_id($attachment->ID) ) {
+			$sizes_id = $featured_id;
+		}
+	}
+
+
+	// sizes
+	if( $sizes_id ) {
+
+		// vars
+		$sizes = get_intermediate_image_sizes();
+		$data = array();
+
+		// loop
+		foreach( $sizes as $size ) {
+			$src = wp_get_attachment_image_src( $sizes_id, $size );
+			$data[ $size ] = $src[0];
+			$data[ $size . '-width' ] = $src[1];
+			$data[ $size . '-height' ] = $src[2];
+		}
+
+		// append
+		$response['sizes'] = $data;
+	}
+
+	// return
+	return $response;
+
 }
 
 /**
@@ -50,15 +131,22 @@ function list_terms( $id = 0, $tax = '' ) {
  * @param  string $size Name of the thumbnail size to return
  * @return string       URL of image in requested size
  */
-function get_post_img_url( $size = 'full', $post_id = 0 ) {
-	global $post;
-
-	$id = isset( $post_id ) ? $post_id : $post->ID;
-
-	$thumb = wp_get_attachment_image_src( get_post_thumbnail_id( $post_id ), $size );
-	$url = $thumb['0'];
+function get_post_thumbnail_url( $size = 'full', $post = 0 ) {
+	$thumb = lj_get_posthumbnail( $post );
+	$url = $size === 'full' ? $thumb['url'] : $thumb['sizes'][$size];
 
 	return $url;
+}
+
+/**
+ * List terms from a taxonomy for any post
+ * @param  str  $tax  The name of the taxonomy
+ * @param  mxd  $post The post object
+ * @return str        The terms as text
+ */
+function lj_list_terms( $tax, $post = 0 ) {
+	$terms_as_text = get_the_term_list( $post, $tax, '', ', ' );
+	if( ! empty( $terms_as_text ) ) echo strip_tags( $terms_as_text );
 }
 
 /**
@@ -99,7 +187,7 @@ function post_type_labels( $singular, $plural = null ) {
  * @param mixed  $color Color.
  * @return bool  True if a light color.
  */
-function lbrjk_hex_is_light( $color ) {
+function lj_hex_is_light( $color ) {
     $hex = str_replace( '#', '', $color );
 
     $c_r = hexdec( substr( $hex, 0, 2 ) );

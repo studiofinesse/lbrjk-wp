@@ -1,5 +1,7 @@
 <?php
 
+if( ! defined('ABSPATH' ) ) exit;
+
 /**
  * Build array of opening hours from repeater option
  * @return array Company opening hours

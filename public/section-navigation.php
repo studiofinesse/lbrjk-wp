@@ -1,5 +1,7 @@
 <?php
 
+if ( ! defined( 'ABSPATH') ) exit;
+
 /**
  * Output an unordered list of either
  * the current page's children or siblings

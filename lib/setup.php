@@ -1,10 +1,12 @@
 <?php
 
+if( ! defined('ABSPATH' ) ) exit;
+
 /**
  * Disable fucking emojis
  * We love emojis, just not on a website ( and by default )
  */
-function lbrjk_disable_emoji() {
+function lj_disable_emoji() {
 	remove_action( 'admin_print_styles', 'print_emoji_styles' );
 	remove_action( 'wp_head', 'print_emoji_detection_script', 7 );
 	remove_action( 'admin_print_scripts', 'print_emoji_detection_script' );
@@ -15,7 +17,7 @@ function lbrjk_disable_emoji() {
 	// Remove emojis from TinyMCE
 	// add_filter( 'tiny_mce_plugins', 'disable_emojicons_tinymce' )
 }
-add_action( 'after_setup_theme', 'lbrjk_disable_emoji' );
+add_action( 'after_setup_theme', 'lj_disable_emoji' );
 
 /**
  * Disable REST API

@@ -1,12 +1,14 @@
 <?php
 
+if( ! defined('ABSPATH' ) ) exit;
+
 /**
  * Use ACF image field as avatar
  * @author Mike Hemberger
  * @link http://thestizmedia.com/acf-pro-simple-local-avatars/
  * @uses ACF Pro image field (tested return value set as Array )
  */
-function lj_acf_profile_avatar( $avatar, $id_or_email, $size, $default, $alt ) {
+function lj_local_avatars( $avatar, $id_or_email, $size, $default, $alt ) {
     // Get user by id or email
     if ( is_numeric( $id_or_email ) ) {
         $id   = (int) $id_or_email;
@@ -25,7 +27,7 @@ function lj_acf_profile_avatar( $avatar, $id_or_email, $size, $default, $alt ) {
     // Get the user id
     $user_id = $user->ID;
     // Get the file id
-    $image_id = get_user_meta($user_id, 'user_avatar', true); // CHANGE TO YOUR FIELD NAME
+    $image_id = get_user_meta($user_id, 'user_avatar', true);
     // Bail if we don't have a local avatar
     if ( ! $image_id ) {
         return $avatar;
@@ -39,4 +41,4 @@ function lj_acf_profile_avatar( $avatar, $id_or_email, $size, $default, $alt ) {
     // Return our new avatar
     return $avatar;
 }
-add_filter('get_avatar', 'lj_acf_profile_avatar', 10, 5);
+add_filter( 'get_avatar', 'lj_local_avatars', 10, 5 );

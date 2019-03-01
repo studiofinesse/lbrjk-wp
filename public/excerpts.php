@@ -1,5 +1,7 @@
 <?php
 
+if ( ! defined( 'ABSPATH') ) exit;
+
 /**
  * Get an excerpt of post with custom length
  * @param  Integer $length Number of words to return

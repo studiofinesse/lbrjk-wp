@@ -1,6 +1,12 @@
 <?php
 
-function lj_social_links() {
+if ( ! defined( 'ABSPATH') ) exit;
+
+/**
+ * Return a text list of the company social accounts
+ * @return str An unordered list of links
+ */
+function lj_social_account_links() {
 	$accounts = get_field( 'social_media_accounts', 'option' );
 
 	if( $accounts ) {
@@ -12,7 +18,12 @@ function lj_social_links() {
 	}
 }
 
-function lj_social_icons( $colors = false ) {
+/**
+ * Return a list of brand svg icons of the company social accounts
+ * @param  bool $colors Optionally brand the icons
+ * @return str          An unordered list of links/icons
+ */
+function lj_social_account_icons( $colors = false ) {
 	$accounts = get_field( 'social_media_accounts', 'option' );
 
 	if( $accounts ) {

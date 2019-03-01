@@ -5,7 +5,7 @@
 * Plugin Name:       LBRJK
 * Plugin URI:        http://lbrjk.com
 * Description:       Just the core functionality that we like to use with most WordPress installs
-* Version:           1.0.0
+* Version:           2.0.0
 * Author:            Lumberjack
 * Author URI:        http://lbrjk.com/
  */

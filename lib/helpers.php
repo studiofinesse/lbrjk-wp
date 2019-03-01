@@ -1,5 +1,7 @@
 <?php
 
+if( ! defined('ABSPATH' ) ) exit;
+
 /**
  * Get various info from ACF options page
  * @param  str $type Info to retrieve
@@ -10,11 +12,16 @@ function get_company_info( $type ) {
 	return get_field( $type, 'option' );
 }
 
+/**
+ * Return the company address in relavant schema markup
+ * @param  bool $inc_name Optionally include the company name
+ * @return str            The address markup
+ */
 function the_company_address( $inc_name = false ) {
-	// Company name
-	$name = get_company_info( 'name' );
-	// Company address
-	$address = get_company_info( 'address' );
+
+	$name = get_company_info( 'name' ); // Store company name
+	$address = get_company_info( 'address' ); // Store company address
+
 	// Address items
 	$address_one = $address['company_address_1'];
 	$address_two = $address['company_address_2'];
@@ -36,6 +43,12 @@ function the_company_address( $inc_name = false ) {
 	echo '</div>';
 }
 
+/**
+ * Use the company address to create a link to Google Maps
+ * @param  str  $type     Choose link type [directions|place]
+ * @param  bool $inc_name Optionally include the company name within the link
+ * @return str            The Google Maps url based on selected options
+ */
 function get_company_gm_link( $type, $inc_name = false ) {
 
 	if( $type === 'directions' ) {
@@ -53,17 +66,48 @@ function get_company_gm_link( $type, $inc_name = false ) {
 	return $url . $link;
 }
 
-function the_company_email_link() {
-	$email_address = get_company_info( 'email' );
+/**
+ * Return the company email address
+ * @param  bool $echo Choose whether to echo (true) or return (false) the end result
+ * @param  bool $link Wrap email address in mailto link
+ * @return str        The email address either with or without anchor tags
+ */
+function the_company_email( $echo, $link ) {
+	$email_address = get_company_info( 'email' ); // store the email address
 
-	return '<a href="' . antispambot( "mailto:$email_address" ) . '">' . antispambot( $email_address ) . '</a>';
+	$email = $link ? '<a href="' . antispambot( "mailto:$email_address" ) . '" class="email-link">' : '';
+	$email .= antispambot( $email_address );
+	$email .= $link ? '</a>' : '';
+
+	if( $echo ) {
+		echo $email;
+	} else {
+		return $email;
+	}
+
 }
 
-function the_company_tel_link() {
-	$tel_no = get_company_info( 'tel' );
-	$tel_no_link = str_replace( ' ', '', $tel_no );
-	// Replace leading zero with country code
-	$tel_no_link = preg_replace( '/^0?/', '+44', $tel_no_link );
+/**
+ * Return the company telephone number
+ * @param  bool $echo         Choose whether to echo (true) or return (false) the end resul
+ * @param  bool $link         Wrap telephone number in mailto link
+ * @param  str $country_code  If outside the UK update the country code accordingly
+ * @return str                The telephone number either with or without anchor tags
+ */
+function the_company_tel( $echo, $link, $country_code = '44' ) {
+	$tel_no = get_company_info( 'tel' ); // store the telephone number from the options
 
-	return '<a href="tel:' . $tel_no_link . '">' . $tel_no . '</a>';
+	// Modify telephone number for link purposes
+	$tel_no_link = str_replace( array(' ', '-'), '', $tel_no ); // Remove any spaces or dashes from the telephone number
+	$tel_no_link = preg_replace( '/^0?/', '+' . $country_code, $tel_no_link ); // Replace leading zero with country code
+
+	$tel = $link ? '<a href="tel:' . $tel_no_link . '" class="tel-link">' : '';
+	$tel .= $tel_no;
+	$tel .= $link ? '</a>' : '';
+
+	if( $echo ) {
+		echo $tel;
+	} else {
+		return $tel;
+	}
 }

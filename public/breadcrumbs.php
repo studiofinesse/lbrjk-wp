@@ -1,5 +1,12 @@
 <?php
 
+if ( ! defined( 'ABSPATH') ) exit;
+
+/**
+ * Basic breadcrumbs function
+ * @param  str $class Pass a class name, default: 'breadcrumbs'
+ * @return str        The html markup
+ */
 function lj_breadcrumbs( $class = 'breadcrumbs' ) {
 
 	// Global post variable

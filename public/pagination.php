@@ -1,5 +1,7 @@
 <?php
 
+if ( ! defined( 'ABSPATH') ) exit;
+
 /**
  * Simple next/previous links
  * for blog archive and single posts
@@ -20,14 +22,10 @@ function lj_prev_next_pagination( $class = 'post-pagination' ) {
 	$next_text = 'Older Posts';
 
 	if( $pages > 1 ) {
-
 		echo '<div class="' . $class . '">';
-		if( ! $has_prev ) echo '<span class="' . $class . '__prev disabled">' . $prev_text . '</span>';
-		if( $has_prev ) echo '<a href="' . $prev_link . '" class="' . $class . '__prev">' . $prev_text . '</a>';
-		if( $has_next ) echo '<a href="' . $next_link . '" class="' . $class . '__next">' . $next_text . '</a>';
-		if( ! $has_next ) echo '<span class="' . $class . '__next disabled">' . $next_text . '</span>';
+		echo $has_prev ? '<a href="' . $prev_link . '" class="prev">' . $prev_text . '</a>' : '<span class="prev disabled">' . $prev_text . '</span>';
+		echo $has_next ? '<a href="' . $next_link . '" class="next">' . $next_text . '</a>' : '<span class="next disabled">' . $next_text . '</span>';
 		echo '</div>';
-
 	}
 
 }

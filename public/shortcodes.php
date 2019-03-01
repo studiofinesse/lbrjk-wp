@@ -1,5 +1,7 @@
 <?php
 
+if ( ! defined( 'ABSPATH') ) exit;
+
 /**
  * Output copyright symbol and current year
  * @return str e.g. '© 2017'
@@ -21,6 +23,6 @@ function sc_company_tel_link() {
 add_shortcode( 'company_tel_link', 'sc_company_tel_link' );
 
 function sc_company_email_link() {
-	return the_company_email_link();
+	return the_company_email( false, true );
 }
 add_shortcode( 'company_email_link', 'sc_company_email_link' );

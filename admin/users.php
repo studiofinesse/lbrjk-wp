@@ -1,5 +1,7 @@
 <?php
 
+if( ! defined('ABSPATH' ) ) exit;
+
 /*
  * Get user's role
  *
@@ -10,7 +12,7 @@
  * @param  mixed       $user User ID or object.
  * @return string|bool       The User's role, or false on failure.
  */
-function get_user_role( $user = null ) {
+function lj_get_user_role( $user = null ) {
 	$user = $user ? new WP_User( $user ) : wp_get_current_user();
 	return $user->roles ? $user->roles[0] : 'guest';
 }
@@ -20,7 +22,7 @@ function get_user_role( $user = null ) {
  * @param  array $roles List of roles to check
  * @return bool         Does query match current user role
  */
-function current_user_role_is( $roles ) {
+function lj_current_user_role_is( $roles ) {
 	// Current user object
 	$user = wp_get_current_user();
 	// Array of roles to check for
@@ -36,8 +38,8 @@ function current_user_role_is( $roles ) {
 /**
  * Add form viewing privileges to Editors
  */
-function lbrjk_user_privileges() {
+function lj_user_privileges() {
 	$role = get_role( 'editor' );
 	$role->add_cap( 'gravityforms_view_entries' );
 }
-add_action( 'init', 'lbrjk_user_privileges' );
+add_action( 'init', 'lj_user_privileges' );
