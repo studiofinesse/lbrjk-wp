@@ -104,8 +104,11 @@ table td {
 
 /* MEDIA */
 img {
-	height: auto !important;
 	max-width: 100%;
+}
+
+img:not([data-wp-more]) {
+	height: auto !important;
 }
 
 img.size-full,
