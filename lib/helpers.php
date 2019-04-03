@@ -29,16 +29,18 @@ function the_company_address( $inc_name = false ) {
 	$locality = $address['company_locality'];
 	$region = $address['company_region'];
 	$postcode = $address['company_postcode'];
+	$country = $address['company_country'];
 
 	echo '<div itemscope itemtype="http://schema.org/PostalAddress">';
 	echo '<p class="address">';
-	if( $inc_name ) echo '<span itemprop="name" class="address__name">' . $name . '</span> ';
+	if( $inc_name )    echo '<span itemprop="name" class="address__name">' . $name . '</span> ';
 	if( $address_one ) echo '<span itemprop="streetAddress" class="address__street">' . $address_one . '</span> ';
 	if( $address_two ) echo '<span itemprop="streetAddress" class="address__street">' . $address_two . '</span> ';
-	echo '<span itemprop="streetAddress" class="address__street">' . $str_address . '</span> ';
-	echo '<span itemprop="addressLocality" class="address__locality">' . $locality . '</span> ';
-	echo '<span itemprop="addressRegion" class="address_region">' . $region . '</span> ';
-	echo '<span itemprop="postalCode" class="address__postcode">' . $postcode . '</span>';
+	if( $str_address ) echo '<span itemprop="streetAddress" class="address__street">' . $str_address . '</span> ';
+	if( $locality )    echo '<span itemprop="addressLocality" class="address__locality">' . $locality . '</span> ';
+	if( $region )      echo '<span itemprop="addressRegion" class="address_region">' . $region . '</span> ';
+	if( $postcode )    echo '<span itemprop="postalCode" class="address__postcode">' . $postcode . '</span>';
+	if( $country )     echo '<span itemprop="addressCounty" class="address__country">' . $country . '</span>';
 	echo '</p>';
 	echo '</div>';
 }
