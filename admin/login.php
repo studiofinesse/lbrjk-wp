@@ -26,4 +26,4 @@ add_filter( 'login_headerurl', 'lj_login_logo_url' );
 function lj_login_logo_url_title() {
 	return 'Return to ' . get_bloginfo( 'name' );
 }
-add_filter( 'login_headertitle', 'lj_login_logo_url_title' );
+add_filter( 'login_headertext', 'lj_login_logo_url_title' );
