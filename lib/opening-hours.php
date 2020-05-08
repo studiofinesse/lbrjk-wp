@@ -131,12 +131,9 @@ function opening_hours_as_text( $time_format = 'ampm' ) {
  * @return str Paragraph inc message with correct info
  */
 function when_are_we_open() {
-	// Set timezone
-    date_default_timezone_set( 'Europe/London' );
-
 	// Get today's opening hours
-	$today = date( 'l' );
-    $now = date( 'H:i:s' );
+	$today = current_time( 'l' );
+    $now = current_time( 'H:i:s' );
 	$opening_hours = get_opening_hours_formatted( 'H:i' );
 	$hours = $opening_hours[$today];
 
