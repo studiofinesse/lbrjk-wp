@@ -27,16 +27,14 @@ function lj_social_account_icons( $colors = false ) {
 	$accounts = get_field( 'social_media_accounts', 'option' );
 
 	if( $accounts ) {
-		echo $colors ? '<div class="social-icons social-icons--branded">' : '<div class="social-icons">';
-		echo '<ul>';
+		echo '<div class="social-icons">';
+		echo '<span itemscope itemtype="https://schema.org/Organization">';
 		foreach( $accounts as $account ) {
-			echo '<li class="icon icon--' . $account['social_media_account']['value'] . '">';
-			echo '<a href="' . $account['social_media_account_url'] . '" title="Find us on ' . $account['social_media_account']['label'] . '">';
-			echo file_get_contents(  plugin_dir_url(  '', __FILE__  ) . 'lbrjk-wp/assets/img/icon-' . $account['social_media_account']['value'] . '.svg'  );
+			echo '<link itemprop="url" href="' . home_url() . '">';
+			echo '<a itemprop="sameAs" href="' . $account['social_media_account_url'] . '" title="Find us on ' . $account['social_media_account']['label'] . '">';
+			echo file_get_contents( plugin_dir_url( '', __FILE__ ) . 'lbrjk-wp/assets/img/icon-' . $account['social_media_account']['value'] . '.svg' );
 			echo '</a>';
-			echo '</li>';
 		}
-		echo '</ul>';
-		echo '</div>';
+		echo '</span></div>';
 	}
 }
