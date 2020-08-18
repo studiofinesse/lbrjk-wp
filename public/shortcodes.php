@@ -6,9 +6,28 @@ if ( ! defined( 'ABSPATH') ) exit;
  * Output copyright symbol and current year
  * @return str e.g. '© 2017'
  */
-function sc_copyright_message() {
-	$year = date( 'Y' );
-	return ' &copy; Copyright ' . $year;
+function sc_copyright_message( $atts ) {
+
+	$current_year = date( 'Y' );
+
+	extract( shortcode_atts( array(
+		'start' => $current_year,
+		'append' => ''
+
+	), $atts ) );
+
+	if( $start == $current_year ) {
+		$years = $current_year;
+	} else {
+		$years = "$start-$current_year";
+	}
+
+	if( $append )
+		return "&copy $append $years";
+	else {
+		return "&copy $years";
+	}
+
 }
 add_shortcode( 'copyright', 'sc_copyright_message' );
 
